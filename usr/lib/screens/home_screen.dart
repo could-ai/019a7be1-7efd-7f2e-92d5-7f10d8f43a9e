@@ -1,182 +1,192 @@
 import 'package:flutter/material.dart';
-import '../widgets/swipe_card.dart';
-import '../models/user_profile.dart';
+import 'game_screen.dart';
+import 'lobby_screen.dart';
+import 'profile_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-
-  final List<UserProfile> _profiles = [
-    UserProfile(
-      id: '1',
-      name: 'Emma',
-      age: 25,
-      bio: 'Love traveling and photography 📸',
-      distance: 5,
-      photos: ['https://picsum.photos/400/600?random=1'],
-      interests: ['Travel', 'Photography', 'Coffee'],
-    ),
-    UserProfile(
-      id: '2',
-      name: 'Sophia',
-      age: 28,
-      bio: 'Fitness enthusiast & foodie 🏋️‍♀️🍕',
-      distance: 8,
-      photos: ['https://picsum.photos/400/600?random=2'],
-      interests: ['Fitness', 'Cooking', 'Yoga'],
-    ),
-    UserProfile(
-      id: '3',
-      name: 'Olivia',
-      age: 26,
-      bio: 'Artist | Music lover | Dog mom 🎨🎵🐕',
-      distance: 3,
-      photos: ['https://picsum.photos/400/600?random=3'],
-      interests: ['Art', 'Music', 'Dogs'],
-    ),
-    UserProfile(
-      id: '4',
-      name: 'Ava',
-      age: 27,
-      bio: 'Adventure seeker and book lover 📚⛰️',
-      distance: 12,
-      photos: ['https://picsum.photos/400/600?random=4'],
-      interests: ['Reading', 'Hiking', 'Adventure'],
-    ),
-    UserProfile(
-      id: '5',
-      name: 'Isabella',
-      age: 24,
-      bio: 'Coffee addict ☕ | Netflix binger',
-      distance: 6,
-      photos: ['https://picsum.photos/400/600?random=5'],
-      interests: ['Coffee', 'Movies', 'Cooking'],
-    ),
-  ];
-
-  void _handleSwipe(String direction, UserProfile profile) {
-    setState(() {
-      if (_currentIndex < _profiles.length - 1) {
-        _currentIndex++;
-      } else {
-        // All profiles swiped
-        _showNoMoreProfilesDialog();
-      }
-    });
-
-    if (direction == 'right') {
-      _showMatchDialog(profile);
-    }
-  }
-
-  void _showMatchDialog(UserProfile profile) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('It\'s a Match! 💕'),
-        content: Text('You and ${profile.name} liked each other!'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Keep Swiping'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Navigate to messages
-            },
-            child: const Text('Send Message'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showNoMoreProfilesDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('No More Profiles'),
-        content: const Text('Check back later for more people nearby!'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.local_fire_department,
-              color: Theme.of(context).colorScheme.primary,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF1B5E20),
+              Color(0xFF2E7D32),
+              Color(0xFF1B5E20),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Logo区域
+                const Icon(
+                  Icons.casino,
+                  size: 120,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  '德州扑克',
+                  style: TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black54,
+                        offset: Offset(2, 2),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                ),
+                const Text(
+                  'TEXAS HOLD\'EM',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white70,
+                    letterSpacing: 4,
+                  ),
+                ),
+                const SizedBox(height: 80),
+                
+                // 菜单按钮
+                _MenuButton(
+                  icon: Icons.play_circle_filled,
+                  label: '快速开始',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GameScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                _MenuButton(
+                  icon: Icons.group,
+                  label: '游戏大厅',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LobbyScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                _MenuButton(
+                  icon: Icons.person,
+                  label: '个人中心',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                _MenuButton(
+                  icon: Icons.help_outline,
+                  label: '游戏规则',
+                  onTap: () {
+                    _showRulesDialog(context);
+                  },
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            const Text(
-              'Discover',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showRulesDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('德州扑克规则'),
+        content: const SingleChildScrollView(
+          child: Text(
+            '基本规则：\n\n'
+            '1. 每位玩家发两张底牌\n'
+            '2. 桌面依次发出5张公共牌\n'
+            '3. 玩家用自己的2张底牌和5张公共牌组成最佳的5张牌\n'
+            '4. 牌型大小：皇家同花顺 > 同花顺 > 四条 > 葫芦 > 同花 > 顺子 > 三条 > 两对 > 一对 > 高牌\n\n'
+            '游戏流程：\n'
+            '• 翻牌前（Pre-flop）: 发底牌后第一轮下注\n'
+            '• 翻牌（Flop）: 发3张公共牌\n'
+            '• 转牌（Turn）: 发第4张公共牌\n'
+            '• 河牌（River）: 发第5张公共牌\n'
+            '• 摊牌（Showdown）: 比较牌型大小',
+            style: TextStyle(fontSize: 14),
+          ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.tune),
-            onPressed: () {
-              // Open filters
-            },
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('知道了'),
           ),
         ],
       ),
-      body: _currentIndex < _profiles.length
-          ? Center(
-              child: SwipeCard(
-                profile: _profiles[_currentIndex],
-                onSwipe: _handleSwipe,
-              ),
-            )
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.check_circle_outline,
-                    size: 100,
-                    color: Colors.grey[400],
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'No more profiles',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Check back later!',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ],
+    );
+  }
+}
+
+class _MenuButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _MenuButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: 280,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.3),
+            width: 2,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 32),
+            const SizedBox(width: 16),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }
