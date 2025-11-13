@@ -95,47 +95,49 @@ class PlayerSeatWidget extends StatelessWidget {
           ),
           
           // 当前下注
-          if (player.currentBet > 0) ..[
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                '下注: ¥${player.currentBet}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+          if (player.currentBet > 0)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  '下注: ¥${player.currentBet}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ],
           
           // 底牌
-          if (player.holeCards.isNotEmpty && !player.hasFolded) ..[
-            const SizedBox(height: 8),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                PlayingCardWidget(
-                  card: player.holeCards[0],
-                  size: 30,
-                  faceDown: !showCards,
-                ),
-                const SizedBox(width: 4),
-                PlayingCardWidget(
-                  card: player.holeCards.length > 1
-                      ? player.holeCards[1]
-                      : player.holeCards[0],
-                  size: 30,
-                  faceDown: !showCards,
-                ),
-              ],
+          if (player.holeCards.isNotEmpty && !player.hasFolded)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  PlayingCardWidget(
+                    card: player.holeCards[0],
+                    size: 30,
+                    faceDown: !showCards,
+                  ),
+                  const SizedBox(width: 4),
+                  PlayingCardWidget(
+                    card: player.holeCards.length > 1
+                        ? player.holeCards[1]
+                        : player.holeCards[0],
+                    size: 30,
+                    faceDown: !showCards,
+                  ),
+                ],
+              ),
             ),
-          ],
           
           // 状态标签
           if (player.hasFolded)
